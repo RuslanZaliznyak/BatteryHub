@@ -49,7 +49,7 @@ def add_new_battery(req: request):
                 source_id = new_source.id
 
             existing_voltage = \
-                BatteryVoltage.query.filter_by(battery_voltage=voltage).firts()
+                BatteryVoltage.query.filter_by(battery_voltage=voltage).first()
             if existing_voltage:
                 voltage_id = existing_voltage.id
             else:
@@ -59,7 +59,7 @@ def add_new_battery(req: request):
                 voltage_id = new_voltage.id
 
             existing_resistance = \
-                BatteryResistance.query.filter_by(battery_resistance=resistance)
+                BatteryResistance.query.filter_by(battery_resistance=resistance).first()
             if existing_resistance:
                 resistance_id = existing_resistance.id
             else:
@@ -71,8 +71,10 @@ def add_new_battery(req: request):
             insert_data = BatteryData(
                 barcode=barcode,
                 name_id=name_id,
-                voltage_id=voltage,
-                resistance_id=resistance,
+                color_id=color_id,
+                voltage_id=voltage_id,
+                resistance_id=resistance_id,
+                battery_source_id=source_id,
                 timestamp=timestamp
             )
             db.session.add(insert_data)

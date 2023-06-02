@@ -1,5 +1,4 @@
 from app.extensions import db
-from sqlalchemy import ForeignKey
 
 
 class BatteryData(db.Model):
@@ -7,8 +6,10 @@ class BatteryData(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     barcode = db.Column(db.Integer, unique=True, nullable=False)
     name_id = db.Column(db.Integer, db.ForeignKey('battery_name.id'))
+    color_id = db.Column(db. Integer, db.ForeignKey('battery_color.id'))
     voltage_id = db.Column(db.Integer, db.ForeignKey('battery_voltage.id'))
     resistance_id = db.Column(db.Integer, db.ForeignKey('battery_resistance.id'))
+    battery_source_id = db.Column(db. Integer, db.ForeignKey('battery_source.id'))
     timestamp = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
