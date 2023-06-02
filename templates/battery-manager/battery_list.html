@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block bat_list %}
+
+<table>
+    <tr>
+        <th>Barcode</th>
+        <th>Color</th>
+        <th>Name</th>
+        <th>Source</th>
+        <th>Resistance</th>
+        <th>Voltage</th>
+    </tr>
+    { for battery in batteries }
+        <tr>
+
+        </tr>
+    { endfor }
+</table>
+
+{% endblock %}
