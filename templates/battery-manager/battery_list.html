@@ -1,21 +1,55 @@
-{% extends 'base.html' %}
+{% extends 'battery-manager/base.html' %}
 
-{% block bat_list %}
+{% block manager %}
+<div class="add_form">
+    <form method="POST">
+        <label for="barcode">Barcode</label>
+        <input type="text" name="barcode" id="barcode">
 
-<table>
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title">
+
+        <label for="color">Color</label>
+        <input type="text" name="color" id="color">
+
+        <label for="voltage">Voltage</label>
+        <input type="text" name="voltage" id="voltage">
+
+        <label for="resistance">Resistance</label>
+        <input type="text" name="resistance" id="resistance">
+
+        <label for="battery_source">Battery source</label>
+        <input type="text" name="battery_source" id="battery_source">
+
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+
+<table class="table table-hover">
+  <thead>
     <tr>
-        <th>Barcode</th>
-        <th>Color</th>
-        <th>Name</th>
-        <th>Source</th>
-        <th>Resistance</th>
-        <th>Voltage</th>
+      <th scope="col">Barcode</th>
+      <th scope="col">Title</th>
+      <th scope="col">Color</th>
+      <th scope="col">Voltage</th>
+      <th scope="col">Resistance</th>
+      <th scope="col">Battery Source</th>
+      <th scope="col">Datetime</th></tr>
+  </thead>
+  <tbody>
+    {% for battery in batteries %}
+    <tr>
+      <td>{{ battery.barcode }}</td>
+      <td>{{ battery.battery_name }}</td>
+      <td>{{ battery.battery_color }}</td>
+      <td>{{ battery.battery_voltage }}</td>
+      <td>{{ battery.battery_resistance }}</td>
+      <td>{{ battery.battery_source }}</td>
+      <td>{{ battery.datetime }}</td>
+      <td><a href="/delete/{{ battery.barcode }}">delete</a></td>
     </tr>
-    { for battery in batteries }
-        <tr>
-
-        </tr>
-    { endfor }
+    {% endfor %}
+  </tbody>
 </table>
-
 {% endblock %}

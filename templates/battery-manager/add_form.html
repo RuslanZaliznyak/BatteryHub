@@ -1,25 +1,23 @@
-{% extends 'base.html' %}
-
 {% block add_form %}
 <div>
     <form method="POST">
         <label for="barcode">Barcode</label>
-        <input type="text" name="barcode" id="barcode">
+        <input type="text" name="barcode" id="barcode" required>
 
-        <label for="title">Title</label>
-        <input type="text" name="title" id="title">
+        <label for="name">Title</label>
+        <input type="text" name="name" id="name">
 
         <label for="color">Color</label>
-        <input type="text" name="color" id="color">
+        <input type="text" name="color" id="color" required>
 
         <label for="voltage">Voltage</label>
-        <input type="text" name="voltage" id="voltage">
+        <input type="text" name="voltage" id="voltage" required>
 
         <label for="resistance">Resistance</label>
-        <input type="text" name="resistance" id="resistance">
+        <input type="text" name="resistance" id="resistance" required>
 
-        <label for="battery_source">Battery source</label>
-        <input type="text" name="battery_source" id="battery_source">
+        <label for="source">Battery source</label>
+        <input type="text" name="source" id="source">
 
         <button type="submit">Send</button>
     </form>
