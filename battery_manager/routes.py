@@ -29,4 +29,9 @@ def battery_delete(barcode):
     return redirect('/')
 
 
-
+@bp.route('/search', methods=['POST', 'GET'])
+def search_page():
+    return render_template(
+        'battery-manager/search-page.html',
+        templates_folder='/battery-manager,'
+                           )
