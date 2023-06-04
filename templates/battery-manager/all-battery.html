@@ -15,7 +15,7 @@
   <tbody>
     {% for battery in batteries %}
     <tr>
-      <td>{{ battery.barcode }}</td>
+      <td><a href="/{{ battery.barcode }}">{{ battery.barcode }}</a></td>
       <td>{{ battery.battery_name }}</td>
       <td>{{ battery.battery_color }}</td>
       <td>{{ battery.battery_voltage }}</td>

@@ -10,6 +10,7 @@ from app.models.battery_18650 import \
 from sqlalchemy.exc import SQLAlchemyError
 from app.services.form_services import form_processing
 from pydantic import ValidationError
+from app.validators.battery_manager import MainPage
 
 
 def add_new_battery(req: request):
@@ -95,7 +96,7 @@ def add_new_battery(req: request):
             return "Error adding data to database " + str(e)
 
 
-def get_records(last_10=False):
+def get_records(last_10=False, one_battery=False, barcode_item=None):
     session = db.session
     main = aliased(BatteryData)
     color = aliased(BatteryColor)
@@ -106,11 +107,13 @@ def get_records(last_10=False):
 
     query = session.query(
         main.barcode,
-        color.battery_color,
         name.battery_name,
-        source.battery_source,
+        color.battery_color,
+        voltage.battery_voltage,
         resistance.battery_resistance,
-        voltage.battery_voltage
+        source.battery_source,
+        main.timestamp
+
     ).join(
         color, main.color_id == color.id
     ).join(
@@ -126,6 +129,20 @@ def get_records(last_10=False):
     if last_10:
         query = query.order_by(main.timestamp.desc()).limit(10).all()
         return query
+
+    if one_battery:
+        query = query.filter(main.barcode == barcode_item).first()
+        print(query)
+        result = MainPage(
+            barcode=query.barcode,
+            name=query.battery_name,
+            color=query.battery_color,
+            resistance=query.battery_resistance,
+            voltage=query.battery_voltage,
+            source=query.battery_source,
+            timestamp=query.timestamp
+        )
+        return result
 
     return query.all()
 

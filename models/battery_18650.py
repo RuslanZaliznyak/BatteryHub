@@ -59,3 +59,9 @@ class BatteryResistance(db.Model):
 
     def __repr__(self):
         return f'Battery resistance "{self.battery_resistance}"'
+
+
+class BatteryPhoto(db.Model):
+    __tablename__ = 'battery_photo'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    battery_photo = db.Column(db.LargeBinary)

@@ -2,7 +2,7 @@
 
 {% block manager %}
 <div class="add_form">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <label for="name">Name</label>
         <input type="text" name="name" id="name">
 
@@ -18,6 +18,8 @@
         <label for="source">Source</label>
         <input type="text" name="source" id="source">
 
+        <input type="file" name="photo" accept="image/*">
+
         <button type="submit">Send</button>
     </form>
 </div>
@@ -32,7 +34,7 @@
       <th scope="col">Voltage</th>
       <th scope="col">Resistance</th>
       <th scope="col">Battery Source</th>
-      <th scope="col">Datetime</th></tr>
+      <th scope="col">Timestamp</th></tr>
   </thead>
   <tbody>
     {% for battery in batteries %}
@@ -43,7 +45,7 @@
       <td>{{ battery.battery_voltage }}</td>
       <td>{{ battery.battery_resistance }}</td>
       <td>{{ battery.battery_source }}</td>
-      <td>{{ battery.datetime }}</td>
+      <td>{{ battery.timestamp }}</td>
       <td><a href="/delete/{{ battery.barcode }}">delete</a></td>
     </tr>
     {% endfor %}

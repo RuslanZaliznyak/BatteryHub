@@ -1,0 +1,60 @@
+{% extends '/battery-manager/base.html' %}
+
+{% block manager %}
+
+<table class="table table-hover">
+    <tbody>
+    <tr>
+        <th scope="col">Barcode</th>
+        <td>{{ battery.barcode }}</td>
+    </tr>
+    <tr>
+        <th scope="col">Name</th>
+        <td>{{ battery.name }}</td>
+    </tr>
+    <tr>
+        <th scope="col">Color</th>
+        <td>{{ battery.color }}</td>
+    </tr>
+    <tr>
+        <th scope="col">Initial voltage</th>
+        <td>{{ battery.voltage }}</td>
+    </tr>
+    <tr>
+        <th scope="col">Initial resistance</th>
+        <td>{{ battery.resistance }}</td>
+    </tr>
+    <tr>
+        <th scope="col">Battery source</th>
+        <td>{{ battery.source }}</td>
+    </tr>
+    <tr>
+        <th scope="col">Date and time added</th>
+        <td>{{ battery.timestamp }}</td>
+    </tr>
+
+    <tr>
+        <th scope="col">Last recorded voltage</th>
+        <td>{{ battery.last_voltage }}</td>
+    </tr>
+
+    <tr>
+        <th scope="col">Last charging date</th>
+        <td>{{ battery.last_charge_date }}</td>
+    </tr>
+
+    <tr>
+        <th scope="col">Last recorded resistance</th>
+        <td>{{ battery.last_resistance }}</td>
+    </tr>
+
+    <tr>
+        <th scope="col">Last Measurement Date</th>
+        <td>{{ battery.last_resistance_date }}</td>
+    </tr>
+
+    </tbody>
+
+</table>
+
+{% endblock %}
