@@ -95,7 +95,7 @@ def add_new_battery(req: request):
             return "Error adding data to database " + str(e)
 
 
-def get_for_main_page():
+def get_records(last_10=False):
     session = db.session
     main = aliased(BatteryData)
     color = aliased(BatteryColor)
@@ -123,8 +123,16 @@ def get_for_main_page():
         voltage, main.voltage_id == voltage.id
     )
 
-    results = query.all()
+    if last_10:
+        query = query.order_by(main.timestamp.desc()).limit(10).all()
+        return query
 
-    print (results)
-    return results
+    return query.all()
 
+
+def battery_delete(barcode: int):
+    try:
+        db.session.query(BatteryData).filter(BatteryData.barcode == barcode).delete()
+        db.session.commit()
+    except Exception as ex:
+        return ex
