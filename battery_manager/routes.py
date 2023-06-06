@@ -13,11 +13,8 @@ def main_page():
 @bp.route('/add', methods=['POST', 'GET'])
 def add_page():
     if request.method == 'POST':
-
         add_new_battery(req=request)
         return redirect('/add')
-
-
 
     return render_template(
         'battery-manager/add-battery.html',

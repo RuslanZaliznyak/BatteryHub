@@ -15,6 +15,7 @@ from app.validators.battery_manager import MainPage
 
 def add_new_battery(req: request):
     battery_data = form_processing(req)
+    print(battery_data)
     if battery_data:
         try:
             with db.session.begin_nested():
@@ -128,22 +129,10 @@ def get_records(last_10=False, one_battery=False, barcode_item=None):
 
     if last_10:
         query = query.order_by(main.timestamp.desc()).limit(10).all()
+        print(query)
         return query
 
-    if one_battery:
-        query = query.filter(main.barcode == barcode_item).first()
-        print(query)
-        result = MainPage(
-            barcode=query.barcode,
-            name=query.battery_name,
-            color=query.battery_color,
-            resistance=query.battery_resistance,
-            voltage=query.battery_voltage,
-            source=query.battery_source,
-            timestamp=query.timestamp
-        )
-        return result
-
+    print(query.all)
     return query.all()
 
 
