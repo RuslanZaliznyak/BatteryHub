@@ -16,7 +16,14 @@ def barcode_gen():
 
 
 def form_processing(battery):
+    global capacity
     try:
+        capacity_existing = battery.form.get('capacity')
+        if capacity_existing is not None:
+            capacity = capacity_existing
+        else:
+            capacity = 0
+
         battery_data = MainPage(
             barcode=barcode_gen(),
             name=battery.form.get('name'),

@@ -9,11 +9,13 @@ class MainPage(BaseModel):
     resistance: float
     voltage: float
     source: str | None
+    capacity: None | float
     timestamp: None | datetime.datetime
     last_voltage: None | float
     last_charge_date: None | datetime.datetime
     last_resistance: None | float
     last_resistance_date: None | datetime.datetime
+
 
 
 

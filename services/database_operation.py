@@ -1,144 +1,52 @@
 import datetime
-
-from sqlalchemy.orm import sessionmaker, aliased
-
+from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
 from flask import request
-from app.models.battery_18650 import \
-    BatteryData, BatteryName, BatteryColor, \
-    BatterySource, BatteryResistance, BatteryVoltage
-from sqlalchemy.exc import SQLAlchemyError
+from app.models.battery_18650 import BatteryData, RealParameters, StockParameters
+from app.models.battery_params import BatteryName, BatteryColor, BatterySource, BatteryResistance, BatteryVoltage, BatteryCapacity
 from app.services.form_services import form_processing
-from pydantic import ValidationError
-from app.validators.battery_manager import MainPage
 
 
-def add_new_battery(req: request):
-    battery_data = form_processing(req)
-    print(battery_data)
-    if battery_data:
-        try:
-            with db.session.begin_nested():
-                existing_name = \
-                    BatteryName.query.filter_by(
-                        battery_name=battery_data.name).first()
-                if existing_name:
-                    name_id = existing_name.id
-                else:
-                    new_name = BatteryName(
-                        battery_name=battery_data.name)
-                    db.session.add(new_name)
-                    db.session.flush()
-                    name_id = new_name.id
+def add_battery(req):
+    form = form_processing(req)
+    if form:
+        with db.session.begin_nested():
+            existing_barcode = BatteryData.query.filter_by(barcode=form.barcode).first()
+            if existing_barcode is None:
+                print("Stop code. Barcode exists")
+                return 'Barcode exists - "Error message"'
 
-                existing_color = \
-                    BatteryColor.query.filter_by(
-                        battery_color=battery_data.color).first()
-                if existing_color:
-                    color_id = existing_color.id
-                else:
-                    new_color = BatteryColor(
-                        battery_color=battery_data.color)
-                    db.session.add(new_color)
-                    db.session.flush()
-                    color_id = new_color.id
+            name_id = get_or_create_record(BatteryName, 'name', form.name)
+            color_id = get_or_create_record(BatteryColor, 'color', form.color)
+            source_id = get_or_create_record(BatterySource, 'source', form.source)
+            voltage_id = get_or_create_record(BatteryVoltage, 'voltage', form.voltage)
+            resistance_id = get_or_create_record(BatteryResistance, 'resistance', form.resistance)
 
-                existing_source = \
-                    BatterySource.query.filter_by(
-                        battery_source=battery_data.source).first()
-                if existing_source:
-                    source_id = existing_source.id
-                else:
-                    new_source = BatterySource(
-                        battery_source=battery_data.source)
-                    db.session.add(new_source)
-                    db.session.flush()
-                    source_id = new_source.id
+            real_params = RealParameters.query.filter_by(name_id=name_id).first()
+            if real_params:
+                real_params_id = real_params.id
+            else:
+                new_real_params = RealParameters(name_id=name_id,
+                                                 color_id=color_id,
+                                                 resistance_id=resistance_id,
+                                                 voltage_id=voltage_id)
+                db.session.add(new_real_params)
+                db.session.flush()
+                real_params_id = new_real_params.id
 
-                existing_voltage = \
-                    BatteryVoltage.query.filter_by(
-                        battery_voltage=battery_data.voltage).first()
-                if existing_voltage:
-                    voltage_id = existing_voltage.id
-                else:
-                    new_voltage = BatteryVoltage(
-                        battery_voltage=battery_data.voltage)
-                    db.session.add(new_voltage)
-                    db.session.flush()
-                    voltage_id = new_voltage.id
+            new_battery_data = BatteryData(barcode=form.barcode,
+                                           real_params_id=real_params_id,
+                                           source_id=source_id)
+            db.session.add(new_battery_data)
 
-                existing_resistance = \
-                    BatteryResistance.query.filter_by(
-                        battery_resistance=battery_data.resistance).first()
-                if existing_resistance:
-                    resistance_id = existing_resistance.id
-                else:
-                    new_resistance = BatteryResistance(
-                        battery_resistance=battery_data.resistance)
-                    db.session.add(new_resistance)
-                    db.session.flush()
-                    resistance_id = new_resistance.id
-
-                insert_data = BatteryData(
-                    barcode=battery_data.barcode,
-                    name_id=name_id,
-                    color_id=color_id,
-                    voltage_id=voltage_id,
-                    resistance_id=resistance_id,
-                    battery_source_id=source_id,
-                    timestamp=datetime.datetime.now()
-                )
-                db.session.add(insert_data)
             db.session.commit()
 
-            return "Data has been successfully added to the database"
-        except SQLAlchemyError as e:
-            db.session.rollback()
-            return "Error adding data to database " + str(e)
 
-
-def get_records(last_10=False, one_battery=False, barcode_item=None):
-    session = db.session
-    main = aliased(BatteryData)
-    color = aliased(BatteryColor)
-    name = aliased(BatteryName)
-    source = aliased(BatterySource)
-    resistance = aliased(BatteryResistance)
-    voltage = aliased(BatteryVoltage)
-
-    query = session.query(
-        main.barcode,
-        name.battery_name,
-        color.battery_color,
-        voltage.battery_voltage,
-        resistance.battery_resistance,
-        source.battery_source,
-        main.timestamp
-
-    ).join(
-        color, main.color_id == color.id
-    ).join(
-        name, main.name_id == name.id
-    ).join(
-        source, main.battery_source_id == source.id
-    ).join(
-        resistance, main.resistance_id == resistance.id
-    ).join(
-        voltage, main.voltage_id == voltage.id
-    )
-
-    if last_10:
-        query = query.order_by(main.timestamp.desc()).limit(10).all()
-        print(query)
-        return query
-
-    print(query.all)
-    return query.all()
-
-
-def battery_delete(barcode: int):
-    try:
-        db.session.query(BatteryData).filter(BatteryData.barcode == barcode).delete()
-        db.session.commit()
-    except Exception as ex:
-        return ex
+def get_or_create_record(model, field_name, value):
+    record = model.query.filter_by(**{field_name: value}).first()
+    if record:
+        return record.id
+    new_record = model(**{field_name: value})
+    db.session.add(new_record)
+    db.session.flush()
+    return new_record.id
