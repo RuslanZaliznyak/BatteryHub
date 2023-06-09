@@ -1,8 +1,10 @@
+from sqlalchemy import DECIMAL
+
 from app.extensions import db
 
 
-class BatteryName(db.Model):
-    __tablename__ = 'battery_name'
+class Title(db.Model):
+    __tablename__ = 'title'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -11,11 +13,11 @@ class BatteryName(db.Model):
                      nullable=False)
 
     def __repr__(self):
-        return f'<Name "{self.battery_name}">'
+        return f'<Name "{self.name}">'
 
 
-class BatteryColor(db.Model):
-    __tablename__ = 'battery_color'
+class Color(db.Model):
+    __tablename__ = 'color'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -24,11 +26,11 @@ class BatteryColor(db.Model):
                       nullable=False)
 
     def __repr__(self):
-        return f'<Color "{self.battery_color}">'
+        return f'<Color "{self.color}">'
 
 
-class BatteryCapacity(db.Model):
-    __tablename__ = 'battery_capacity'
+class Capacity(db.Model):
+    __tablename__ = 'capacity'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -37,16 +39,18 @@ class BatteryCapacity(db.Model):
                          nullable=False)
 
 
-class BatteryCurrent(db. Model):
-    __tablename__ = 'battery_current'
-    id = db.Column(db. Integer,
+class Current(db.Model):
+    __tablename__ = 'current'
+    id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    current = db.Column(db. Float)
+    current = db.Column(DECIMAL(precision=3, scale=2),
+                        unique=True
+                        )
 
 
-class BatterySource(db.Model):
-    __tablename__ = 'battery_source'
+class Source(db.Model):
+    __tablename__ = 'source'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
@@ -55,41 +59,51 @@ class BatterySource(db.Model):
                        nullable=False)
 
     def __repr__(self):
-        return f'<Battery source "{self.battery_source}">'
+        return f'<Battery source "{self.source}">'
 
 
-class BatteryVoltage(db.Model):
-    __tablename__ = 'battery_voltage'
+class Voltage(db.Model):
+    __tablename__ = 'voltage'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    voltage = db.Column(db.Float,
+    voltage = db.Column(DECIMAL(precision=3, scale=2),
                         unique=True,
-                        nullable=False)
+                        nullable=False
+                        )
 
     def __repr__(self):
-        return f'Battery voltage  "{self.battery_voltage}"'
+        return f'Battery voltage  "{self.voltage}"'
 
 
-class BatteryResistance(db.Model):
-    __tablename__ = 'battery_resistance'
+class Resistance(db.Model):
+    __tablename__ = 'resistance'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    resistance = db.Column(db.Float,
+    resistance = db.Column(DECIMAL(precision=4, scale=2),
                            unique=True,
-                           nullable=False)
+                           nullable=False
+                           )
 
     def __repr__(self):
-        return f'Battery resistance "{self.battery_resistance}"'
+        return f'Battery resistance "{self.resistance}"'
 
 
-class BatteryPhoto(db.Model):
-    __tablename__ = 'battery_photo'
+class Photo(db.Model):
+    __tablename__ = 'photo'
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    battery_photo = db.Column(db.LargeBinary)
+    photo = db.Column(db.LargeBinary)
 
 
-
+class Weight(db.Model):
+    __tablename__ = 'weight'
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    weight = db.Column(DECIMAL(precision=4, scale=3),
+                       unique=True,
+                       nullable=False
+                       )

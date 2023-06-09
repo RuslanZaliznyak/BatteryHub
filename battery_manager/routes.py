@@ -1,10 +1,12 @@
+from app import db
 from app.battery_manager import bp
-from app.services.database_operation import add_battery
+from app.services.database_operation import add_battery, get_records
 from flask import render_template, request, redirect
 
 
 @bp.route('/')
 def main_page():
+
     return render_template('battery-manager/all-battery.html',
                            templates_folder='battery-manager',
                            )
@@ -19,7 +21,8 @@ def add_page():
     return render_template(
         'battery-manager/add-battery.html',
         templates_folder='/battery-manager',
-        batteries=
+        batteries=[1, 2, 3]
     )
+
 
 
