@@ -1,20 +1,21 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 import datetime
 
 
 class MainPage(BaseModel):
+    """
+    HTML validator of the form for adding a new battery
+    """
     barcode: int
-    name: str | None
+    name: None | str
     color: str
     resistance: float
     voltage: float
     source: str | None
     capacity: None | float
+    weight: None | float
     timestamp: None | datetime.datetime
-    last_voltage: None | float
-    last_charge_date: None | datetime.datetime
-    last_resistance: None | float
-    last_resistance_date: None | datetime.datetime
+
 
 
 
