@@ -16,7 +16,7 @@ def main_page():
 @bp.route('/add', methods=['POST', 'GET'])
 def add_page():
     if request.method == 'POST':
-        return add_battery(flask_req=request)
+        return add_battery(flask_request=request)
     return render_template(
         'battery-manager/add-battery.html',
         templates_folder='/battery-manager',

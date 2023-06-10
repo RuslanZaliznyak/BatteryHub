@@ -29,9 +29,11 @@ def get_records(last_10=False, retrieve_one=False, barcode=None):
         BatteryData.barcode,
         Name.name,
         Color.color,
-        Resistance.resistance,
         Voltage.voltage,
-        Weight.weight
+        Resistance.resistance,
+        Source.source,
+        Weight.weight,
+        Capacity.capacity
     ).join(
         RealParameters, BatteryData.real_params_id == RealParameters.id
     ).join(
@@ -71,8 +73,10 @@ def add_battery(flask_request):
 
     """
     form = form_processing(flask_request)
+    print(form)
     if form:
         # Get or create the IDs for the related records
+
         name_id = get_or_create_record(Name, 'name', form.name)
         color_id = get_or_create_record(Color, 'color', form.color)
         source_id = get_or_create_record(Source, 'source', form.source)
