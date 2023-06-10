@@ -7,10 +7,14 @@ import random
 
 def barcode_gen() -> int:
     """
-    This function checks for a barcode in the database table,
-    if not creates a unique barcode and returns it
-    :return: unique barcode number
-    """
+      Generate a unique barcode number.
+
+      This function checks for the presence of a barcode in the database table.
+      If no barcode exists, it generates a unique barcode number and returns it.
+
+      Returns:
+          int: Unique barcode number.
+      """
     existing_barcodes = db.session.query(BatteryData.barcode).all()
     existing_barcodes = set(barcode[0] for barcode in existing_barcodes)
 
@@ -22,11 +26,23 @@ def barcode_gen() -> int:
 
 def form_processing(request):
     """
-    This function provides processing of HTML forms.
-    It validates the data and sends it, checks to the validator that everything is OK, returns a MainPage object with the data
-    :param flask request:
-    :return:
-    """
+     Process HTML forms and validate the data.
+
+     This function provides processing of HTML forms. It validates
+     the form data and constructs a MainPage object with the validated data.
+
+     If the form data is valid, it returns the MainPage object.
+     If the form data is invalid, it returns False
+     along with the corresponding validation error.
+
+     Parameters:
+         request (flask.request): The Flask request object containing the form data.
+
+     Returns:
+         MainPage or tuple: If the form data is valid, returns a MainPage object with the validated data.
+         If the form data is invalid, returns False along with the corresponding validation error.
+         The validation error can be a ValueError, TypeError, or ValidationError.
+     """
     try:
         battery_data = MainPage(
             barcode=barcode_gen(),

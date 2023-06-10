@@ -4,8 +4,9 @@ import datetime
 
 class MainPage(BaseModel):
     """
-    HTML validator of the form for adding a new battery
+    Represents the HTML form validator for adding a new battery.
     """
+
     barcode: int
     name: None | str
     color: str

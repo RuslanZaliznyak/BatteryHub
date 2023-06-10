@@ -9,82 +9,116 @@ from sqlalchemy.orm import joinedload, aliased
 from flask import render_template
 
 
-def get_records(last_10=False, one_battery=False, barcode_item=None):
-    db.engine.execute(
-        """"""
-    )
+def get_records(last_10=False, retrieve_one=False, barcode=None):
+    """
+    Retrieve battery records from the database.
 
+    Args:
+        last_10 (bool, optional): Flag indicating whether to retrieve the last 10 battery records.
+                                  Defaults to False.
+        retrieve_one (bool, optional): Flag indicating whether to retrieve a single battery record.
+                                       Defaults to False.
+        barcode (int, optional): Barcode of the specific battery to retrieve.
+                                 Required if `retrieve_one` is True.
+
+    Returns:
+        list or object: A list of battery records or a single battery record,
+                        depending on the specified retrieval options.
+    """
+    query = db.session.query(
+        BatteryData.barcode,
+        Name.name,
+        Color.color,
+        Resistance.resistance,
+        Voltage.voltage,
+        Weight.weight
+    ).join(
+        RealParameters, BatteryData.real_params_id == RealParameters.id
+    ).join(
+        Source, BatteryData.source_id == Source.id
+    ).outerjoin(
+        Name, RealParameters.name_id == Name.id
+    ).outerjoin(
+        Color, RealParameters.color_id == Color.id
+    ).outerjoin(
+        Resistance, RealParameters.resistance_id == Resistance.id
+    ).outerjoin(
+        Voltage, RealParameters.voltage_id == Voltage.id
+    ).outerjoin(
+        Weight, RealParameters.weight_id == Weight.id
+    )
 
     if last_10:
         query = query.order_by(BatteryData.timestamp.desc()).limit(10).all()
-        return query
+    elif retrieve_one and barcode is not None:
+        query = query.filter(BatteryData.barcode == barcode).first()
+    else:
+        query = query.all()
 
-    if one_battery:
-        query = query.filter(BatteryData.barcode == barcode_item).first()
-        return query
-
-    return result
+    return query
 
 
-def add_battery(flask_req):
+def add_battery(flask_request):
     """
     Process battery data from the request and add it to the database.
 
     Args:
-        flask_req (request): The request object containing html form data with
-        battery data.
+        flask_request (request): The request object containing HTML form data with battery data.
 
     Returns:
         response: A redirect response if the battery data is successfully processed and added to the database.
         template: A rendered template for trying again if the battery data is invalid or the process fails.
 
     """
-    form = form_processing(flask_req)
+    form = form_processing(flask_request)
     if form:
-        with db.session.begin_nested():
-            name_id = get_or_create_record(Name, 'name', form.name)
-            color_id = get_or_create_record(Color, 'color', form.color)
-            source_id = get_or_create_record(Source, 'source', form.source)
-            voltage_id = get_or_create_record(Voltage, 'voltage', form.voltage)
-            resistance_id = get_or_create_record(Resistance, 'resistance', form.resistance)
-            capacity_id = get_or_create_record(Capacity, 'capacity', form.capacity)
-            weight_id = get_or_create_record(Weight, 'weight', form.weight)
+        # Get or create the IDs for the related records
+        name_id = get_or_create_record(Name, 'name', form.name)
+        color_id = get_or_create_record(Color, 'color', form.color)
+        source_id = get_or_create_record(Source, 'source', form.source)
+        voltage_id = get_or_create_record(Voltage, 'voltage', form.voltage)
+        resistance_id = get_or_create_record(Resistance, 'resistance', form.resistance)
+        capacity_id = get_or_create_record(Capacity, 'capacity', form.capacity)
+        weight_id = get_or_create_record(Weight, 'weight', form.weight)
 
-            real_params = RealParameters.query.filter_by(
+        # Check if the real parameters already exist in the database
+        real_params = RealParameters.query.filter_by(
+            name_id=name_id,
+            color_id=color_id,
+            resistance_id=resistance_id,
+            voltage_id=voltage_id,
+            capacity_id=capacity_id,
+            weight_id=weight_id
+        ).first()
+
+        if real_params:
+            real_params_id = real_params.id
+        else:
+            # Create a new real parameters record
+            new_real_params = RealParameters(
                 name_id=name_id,
                 color_id=color_id,
                 resistance_id=resistance_id,
                 voltage_id=voltage_id,
                 capacity_id=capacity_id,
                 weight_id=weight_id
-            ).first()
-
-            if real_params:
-                real_params_id = real_params.id
-
-            else:
-                new_real_params = RealParameters(
-                    name_id=name_id,
-                    color_id=color_id,
-                    resistance_id=resistance_id,
-                    voltage_id=voltage_id,
-                    capacity_id=capacity_id,
-                    weight_id=weight_id
-                )
-                db.session.add(new_real_params)
-                db.session.flush()
-                real_params_id = new_real_params.id
-
-            new_battery_data = BatteryData(
-                barcode=form.barcode,
-                real_params_id=real_params_id,
-                source_id=source_id
             )
-            db.session.add(new_battery_data)
-            db.session.commit()
+            db.session.add(new_real_params)
+            db.session.flush()  # Flush to get the ID before committing
+            real_params_id = new_real_params.id
+
+        # Create a new battery data record
+        new_battery_data = BatteryData(
+            barcode=form.barcode,
+            real_params_id=real_params_id,
+            source_id=source_id
+        )
+        db.session.add(new_battery_data)
+        db.session.commit()
+
         return redirect('/add')
     else:
-        return render_template('Try again')
+        return render_template('try_again.html')
 
 
 def get_or_create_record(model, field_name, value) -> int:
