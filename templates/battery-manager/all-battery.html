@@ -1,0 +1,30 @@
+{% extends 'battery-manager/base.html' %}
+
+{% block manager %}
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Barcode</th>
+      <th scope="col">Title</th>
+      <th scope="col">Color</th>
+      <th scope="col">Voltage</th>
+      <th scope="col">Resistance</th>
+      <th scope="col">Battery Source</th>
+      <th scope="col">Datetime</th></tr>
+  </thead>
+  <tbody>
+    {% for battery in batteries %}
+    <tr>
+      <td><a href="/{{ battery.barcode }}">{{ battery.barcode }}</a></td>
+      <td>{{ battery.battery_name }}</td>
+      <td>{{ battery.battery_color }}</td>
+      <td>{{ battery.battery_voltage }}</td>
+      <td>{{ battery.battery_resistance }}</td>
+      <td>{{ battery.battery_source }}</td>
+      <td>{{ battery.datetime }}</td>
+      <td><a href="/delete/{{ battery.barcode }}">delete</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

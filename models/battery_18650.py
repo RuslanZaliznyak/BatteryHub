@@ -29,6 +29,11 @@ class BatteryData(db.Model):
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
     timestamp = db.Column(db.DateTime)
 
+    stock_params = db.relationship('StockParameters', backref='battery_data')
+    real_params = db.relationship('RealParameters', backref='battery_data')
+    source = db.relationship('Source', backref='battery_data')
+    photo = db.relationship('Photo', backref='battery_data')
+
 
 class StockParameters(db.Model):
     """
@@ -81,3 +86,9 @@ class RealParameters(db.Model):
     voltage_id = db.Column(db.Integer, db.ForeignKey('voltage.id'), nullable=False)
     weight_id = db.Column(db.Integer, db.ForeignKey('weight.id'))
 
+    name = db.relationship('Name', backref='real_parameters')
+    color = db.relationship('Color', backref='real_parameters')
+    capacity = db.relationship('Capacity', backref='real_parameters')
+    resistance = db.relationship('Resistance', backref='real_parameters')
+    voltage = db.relationship('Voltage', backref='real_parameters')
+    weight = db.relationship('Weight', backref='real_parameters')

@@ -36,18 +36,20 @@ def get_records(last_10=False, retrieve_one=False, barcode=None):
         Capacity.capacity
     ).join(
         RealParameters, BatteryData.real_params_id == RealParameters.id
-    ).join(
+    ).outerjoin(
         Source, BatteryData.source_id == Source.id
     ).outerjoin(
         Name, RealParameters.name_id == Name.id
-    ).outerjoin(
+    ).join(
         Color, RealParameters.color_id == Color.id
-    ).outerjoin(
+    ).join(
         Resistance, RealParameters.resistance_id == Resistance.id
-    ).outerjoin(
+    ).join(
         Voltage, RealParameters.voltage_id == Voltage.id
     ).outerjoin(
         Weight, RealParameters.weight_id == Weight.id
+    ).outerjoin(
+        Capacity, RealParameters.capacity_id == Capacity.id
     )
 
     if last_10:
