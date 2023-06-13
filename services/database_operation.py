@@ -1,12 +1,11 @@
 import datetime
-from sqlalchemy.exc import SQLAlchemyError
 from app.extensions import db
-from flask import request, redirect
+from flask import request, redirect, jsonify
 from app.models.battery_18650 import BatteryData, RealParameters, StockParameters
 from app.models.battery_params import Name, Color, Source, Resistance, Voltage, Capacity, Weight
 from app.services.form_services import form_processing
-from sqlalchemy.orm import joinedload, aliased
 from flask import render_template
+from sqlalchemy import exc
 
 
 def get_records(last_10=False, retrieve_one=False, barcode=None):
@@ -62,7 +61,7 @@ def get_records(last_10=False, retrieve_one=False, barcode=None):
     return query
 
 
-def add_battery(flask_request):
+def add_record(flask_request):
     """
     Process battery data from the request and add it to the database.
 
@@ -75,7 +74,6 @@ def add_battery(flask_request):
 
     """
     form = form_processing(flask_request)
-    print(form)
     if form:
         # Get or create the IDs for the related records
 
@@ -117,13 +115,15 @@ def add_battery(flask_request):
         new_battery_data = BatteryData(
             barcode=form.barcode,
             real_params_id=real_params_id,
-            source_id=source_id
+            source_id=source_id,
+            timestamp=datetime.datetime.now()  # Save the current datetime
         )
         db.session.add(new_battery_data)
         db.session.commit()
 
         return redirect('/add')
     else:
+        # To add error handling
         return render_template('try_again.html')
 
 
@@ -144,15 +144,22 @@ def get_or_create_record(model, field_name, value) -> int:
     """
     record = model.query.filter_by(**{field_name: value}).first()
     if record is None:
-        print(f'{record} is None. Create a new record in database')
-        print(value)
-        print(type(value))
         new_record = model(**{field_name: value})
         db.session.add(new_record)
         db.session.flush()
         db.session.refresh(new_record)
         return new_record.id
-
-    else:
-        print('else')
     return record.id
+
+
+def delete_record(item_barcode: int):
+    try:
+        record = \
+            db.session.query(BatteryData).filter(
+                BatteryData.barcode == item_barcode).first()
+        db.session.delete(record)
+        db.session.commit()
+    except exc.IntegrityError as ex:
+        db.session.rollback()
+        print("Integrity error occurred:", str(ex))
+        return jsonify({"error": "An error occurred while deleting the record."}), 500

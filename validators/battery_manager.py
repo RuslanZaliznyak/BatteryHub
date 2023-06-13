@@ -3,13 +3,13 @@ import datetime
 from typing import Union
 
 
-class MainPage(BaseModel):
+class MainPage(BaseModel):  # Not correct saving 'name'
     """
     Represents the HTML form validator for adding a new battery.
     """
 
     barcode: int
-    name: None | str
+    name: str = Field(..., min_length=1, max_length=10)
     color: str = Field(..., min_length=2, max_length=20)
     resistance: float
     voltage: float
@@ -26,7 +26,7 @@ class MainPage(BaseModel):
 
     @validator('name')
     def validate_name(cls, name):
-        if len(name) == 0 and name is not None:
+        if len(name) < 0 and name is not None:
             return None
 
     @validator('barcode')

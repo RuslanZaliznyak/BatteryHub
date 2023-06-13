@@ -1,12 +1,16 @@
 from app.battery_manager import bp
-from app.services.database_operation import add_battery, get_records
+from app.services.database_operation import add_record, get_records, delete_record
 from flask import render_template, request, redirect
-from app import db
-from app.models.battery_18650 import BatteryData
 
 
 @bp.route('/')
 def main_page():
+    return render_template('battery-manager/dashboard-page.html',
+                           batteries=get_records(last_10=True))
+
+
+@bp.route('/battery-manager')
+def manager_page():
     return render_template('battery-manager/all-battery.html',
                            templates_folder='battery-manager',
                            batteries=get_records()
@@ -16,7 +20,7 @@ def main_page():
 @bp.route('/add', methods=['POST', 'GET'])
 def add_page():
     if request.method == 'POST':
-        return add_battery(flask_request=request)
+        return add_record(flask_request=request)
     return render_template(
         'battery-manager/add-battery.html',
         templates_folder='/battery-manager',
@@ -24,12 +28,15 @@ def add_page():
     )
 
 
+@bp.route('/<barcode>')
+def item_page(barcode):
+    battery = get_records(retrieve_one=True, barcode=barcode)
+    return render_template('battery-manager/battery-page.html',
+                           battery=battery)
+
+
 @bp.route('/delete/<item_barcode>')
 def item_delete(item_barcode):
-    element_to_delete = \
-        db.session.query(BatteryData).filter(BatteryData.barcode == item_barcode).first()
-    db.session.delete(element_to_delete)
-    db.session.commit()
+    delete_record(item_barcode)
     return redirect('/')
-
 

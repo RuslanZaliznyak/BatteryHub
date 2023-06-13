@@ -55,7 +55,6 @@ def form_processing(request):
             weight=request.form.get('weight')
         )
         return battery_data
-
     except (ValueError, TypeError) as e:
         return False, e
     except ValidationError as e:

@@ -1,30 +1,54 @@
 {% extends 'battery-manager/base.html' %}
 
 {% block manager %}
-<table class="table table-hover">
+<nav>
+  <h6>Save to: </h6>
+  <a href="" class="btn btn-primary">CSV</a>
+  <a href="" class="btn btn-primary">Excel</a>
+  <a href="" class="btn btn-primary">PDF</a>
+  <button class="btn btn-primary" onclick="window.print()">Друкувати</button>
+  <form class="d-flex" role="search">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+  </form>
+</nav>
+
+<table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">Barcode</th>
-      <th scope="col">Title</th>
+      <th scope="col">Name</th>
       <th scope="col">Color</th>
       <th scope="col">Voltage</th>
       <th scope="col">Resistance</th>
+      <th scope="col">Capacity</th>
       <th scope="col">Battery Source</th>
-      <th scope="col">Datetime</th></tr>
+      <th scope="col">Weight</th>
+      <th scope="col">Date</th>
   </thead>
   <tbody>
     {% for battery in batteries %}
     <tr>
       <td><a href="/{{ battery.barcode }}">{{ battery.barcode }}</a></td>
-      <td>{{ battery.battery_name }}</td>
-      <td>{{ battery.battery_color }}</td>
-      <td>{{ battery.battery_voltage }}</td>
-      <td>{{ battery.battery_resistance }}</td>
-      <td>{{ battery.battery_source }}</td>
-      <td>{{ battery.datetime }}</td>
+      <td>{{ battery.name }}</td>
+      <td>{{ battery.color }}</td>
+      <td>{{ battery.voltage }}</td>
+      <td>{{ battery.resistance }}</td>
+      <td>{{ battery.capacity}}</td>
+      <td>{{ battery.source }}</td>
+      <td>{{ battery.weight }}</td>
+      <td>{{ battery.timestamp }}</td>
       <td><a href="/delete/{{ battery.barcode }}">delete</a></td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Попередня</a></li>
+      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Наступна</a></li>
+    </ul>
 {% endblock %}
+
