@@ -1,8 +1,10 @@
+import logging
+
 from flask import Flask
 from app.config import Config
 from app.extensions import db
 from app.battery_manager import bp as battery_manager_bp
-from flask_migrate import Migrate
+from waitress import serve
 
 
 def create_app(config_class=Config):
@@ -15,6 +17,11 @@ def create_app(config_class=Config):
     :return: Returns the Flask application - app
     """
     app = Flask(__name__)
+
+    waitress_logger = logging.getLogger('waitress')
+    waitress_logger.setLevel(logging.DEBUG)
+    waitress_logger.addHandler(logging.StreamHandler())
+
     app.config.from_object(config_class)
     db.init_app(app)
 
@@ -25,7 +32,7 @@ def create_app(config_class=Config):
 
 
 if __name__ == '__main__':
-    create_app().run()
-
+    app = create_app()
+    serve(app, host='0.0.0.0', port='5000')
 
 
