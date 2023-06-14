@@ -9,8 +9,17 @@ def main_page():
                            batteries=get_records(last_10=True))
 
 
-@bp.route('/battery-manager')
+@bp.route('/battery-manager', methods=['POST', 'GET'])
 def manager_page():
+    if request.method == 'POST':
+        battery = get_records(
+            retrieve_one=True, barcode=request.form.get('barcode'))
+        print(battery)
+        if battery:
+            return render_template('battery-manager/battery-page.html',
+                                   battery=battery)
+        else:
+            return redirect('/battery-manager')
     return render_template('battery-manager/all-battery.html',
                            templates_folder='battery-manager',
                            batteries=get_records()

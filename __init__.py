@@ -1,5 +1,4 @@
 import logging
-
 from flask import Flask
 from app.config import Config
 from app.extensions import db
@@ -8,15 +7,14 @@ from waitress import serve
 
 
 def create_app(config_class=Config):
-    """
-    The function create and initialises Flask app and Database.
-    Here you to register your blueprint.
-
-
-    :param config_class: Accepts a config class with SQLAlchemy configurations
-    :return: Returns the Flask application - app
-    """
     app = Flask(__name__)
+
+    app.logger.setLevel(logging.DEBUG)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+
+    app.logger.addHandler(console_handler)
 
     waitress_logger = logging.getLogger('waitress')
     waitress_logger.setLevel(logging.DEBUG)
@@ -25,7 +23,6 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     db.init_app(app)
 
-    # Blueprint registration
     app.register_blueprint(battery_manager_bp)
 
     return app
@@ -34,5 +31,3 @@ def create_app(config_class=Config):
 if __name__ == '__main__':
     app = create_app()
     serve(app, host='0.0.0.0', port='5000')
-
-

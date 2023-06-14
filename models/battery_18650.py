@@ -23,7 +23,7 @@ class BatteryData(db.Model):
     __tablename__ = 'battery_data'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     barcode = db.Column(db.Integer, unique=True, nullable=False)
-    stock_params_id = db.Column(db.ForeignKey('stock_parameters.id'))
+    stock_params_id = db.Column(db.d('stock_parameters.id'))
     real_params_id = db.Column(db.ForeignKey('real_parameters.id'))
     source_id = db.Column(db.Integer, db.ForeignKey('source.id'), nullable=False)
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
