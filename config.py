@@ -15,8 +15,6 @@ Note: The basedir variable is defined but not used in this class.
 
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
 
 class Config:
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:pabxy6-rIqtow-hisbum@localhost:3306/BatteryHubAlpha'

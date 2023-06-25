@@ -2,21 +2,49 @@
 
 {% block manager %}
 <nav>
-  <h6>Save to: </h6>
+  <h6>Save to:</h6>
   <a href="" class="btn btn-primary">CSV</a>
   <a href="" class="btn btn-primary">Excel</a>
   <a href="" class="btn btn-primary">PDF</a>
   <button class="btn btn-primary" onclick="window.print()">Друкувати</button>
 
-  <form class="d-flex ml-auto" role="search" method="POST" enctype="multipart/form-data">
-    <div class="input-group">
-      <input name="barcode" class="form-control" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </div>
+  <form method="GET" enctype="multipart/form-data">
+    <label for="order_by">Order By:</label>
+    <input type="text" id="order_by" name="order_by"><br>
+
+    <label for="sort_by">Sort By:</label>
+    <input type="text" id="sort_by" name="sort_by"><br>
+
+    <label for="min_voltage">Min Voltage:</label>
+    <input type="text" id="min_voltage" name="min_voltage"><br>
+
+    <label for="max_voltage">Max Voltage:</label>
+    <input type="text" id="max_voltage" name="max_voltage"><br>
+
+    <label for="min_capacity">Min Capacity:</label>
+    <input type="text" id="min_capacity" name="min_capacity"><br>
+
+    <label for="max_capacity">Max Capacity:</label>
+    <input type="text" id="max_capacity" name="max_capacity"><br>
+
+    <label for="min_resistance">Min Resistance:</label>
+    <input type="text" id="min_resistance" name="min_resistance"><br>
+
+    <label for="max_resistance">Max Resistance:</label>
+    <input type="text" id="max_resistance" name="max_resistance"><br>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name"><br>
+
+    <label for="color">Color:</label>
+    <input type="text" id="color" name="color"><br>
+
+    <label for="source">Source:</label>
+    <input type="text" id="source" name="source"><br>
+
+    <input type="submit" value="Submit">
   </form>
-
 </nav>
-
 
 <table class="table table-bordered">
   <thead>
@@ -30,6 +58,7 @@
       <th scope="col">Battery Source</th>
       <th scope="col">Weight</th>
       <th scope="col">Date</th>
+    </tr>
   </thead>
   <tbody>
     {% for battery in batteries %}
@@ -39,7 +68,7 @@
       <td>{{ battery.color }}</td>
       <td>{{ battery.voltage }}</td>
       <td>{{ battery.resistance }}</td>
-      <td>{{ battery.capacity}}</td>
+      <td>{{ battery.capacity }}</td>
       <td>{{ battery.source }}</td>
       <td>{{ battery.weight }}</td>
       <td>{{ battery.timestamp }}</td>
@@ -48,12 +77,12 @@
     {% endfor %}
   </tbody>
 </table>
-    <ul class="pagination">
-      <li class="page-item"><a class="page-link" href="#">Попередня</a></li>
-      <li class="page-item active"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item"><a class="page-link" href="#">Наступна</a></li>
-    </ul>
-{% endblock %}
 
+<ul class="pagination">
+  <li class="page-item"><a class="page-link" href="#">Попередня</a></li>
+  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+  <li class="page-item"><a class="page-link" href="#">2</a></li>
+  <li class="page-item"><a class="page-link" href="#">3</a></li>
+  <li class="page-item"><a class="page-link" href="#">Наступна</a></li>
+</ul>
+{% endblock %}

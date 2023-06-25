@@ -1,51 +1,43 @@
+import json
+
 from app.battery_manager import bp
-from app.services.database_operation import add_record, get_records, delete_record
 from flask import render_template, request, redirect
+import requests
+from app.models.form_data import Form
+
+TOKEN = 'test_token'
 
 
-@bp.route('/')
-def main_page():
-    return render_template('battery-manager/dashboard-page.html',
-                           batteries=get_records(last_10=True))
+@bp.route('/battery-manager')
+def battery_manager():
+    all_battery = requests.get('http://127.0.0.1:5000/api/records',
+                               headers={'Authorization': TOKEN})
 
+    req_args = request.args
 
-@bp.route('/battery-manager', methods=['POST', 'GET'])
-def manager_page():
-    if request.method == 'POST':
-        battery = get_records(
-            retrieve_one=True, barcode=request.form.get('barcode'))
-        print(battery)
-        if battery:
-            return render_template('battery-manager/battery-page.html',
-                                   battery=battery)
-        else:
-            return redirect('/battery-manager')
-    return render_template('battery-manager/all-battery.html',
-                           templates_folder='battery-manager',
-                           batteries=get_records()
-                           )
+    if req_args:
+        response_from_api = requests.get('http://127.0.0.1:5000/api/records',
+                                         params=req_args,
+                                         headers={'Authorization': TOKEN})
+
+        if response_from_api.status_code == 200:
+            return render_template('battery-manager/all-battery.html', batteries=response_from_api.json()[0])
+
+    return render_template('battery-manager/all-battery.html', batteries=all_battery.json()[0])
 
 
 @bp.route('/add', methods=['POST', 'GET'])
-def add_page():
+def add_battery():
     if request.method == 'POST':
-        return add_record(flask_request=request)
-    return render_template(
-        'battery-manager/add-battery.html',
-        templates_folder='/battery-manager',
-        batteries=get_records(last_10=True)
-    )
+        html_form = request.form.to_dict()
+        form = Form(**html_form)
+        requests.post('http://127.0.0.1:5000/api/records', json=form.json())
+    return render_template('battery-manager/add-battery.html')
 
 
-@bp.route('/<barcode>')
-def item_page(barcode):
-    battery = get_records(retrieve_one=True, barcode=barcode)
-    return render_template('battery-manager/battery-page.html',
-                           battery=battery)
-
-
-@bp.route('/delete/<item_barcode>')
-def item_delete(item_barcode):
-    delete_record(item_barcode)
-    return redirect('/')
-
+@bp.route('/delete/<barcode>')
+def delete(barcode):
+    all_battery = requests.get('http://127.0.0.1:5000/api/records',
+                               headers={'Authorization': TOKEN})
+    req = requests.delete(f'http://127.0.0.1:5000/api/records/delete/{barcode}')
+    return redirect('/battery-manager')
