@@ -37,7 +37,14 @@ def add_battery():
 
 @bp.route('/delete/<barcode>')
 def delete(barcode):
-    all_battery = requests.get('http://127.0.0.1:5000/api/records',
+    requests.get('http://127.0.0.1:5000/api/records',
                                headers={'Authorization': TOKEN})
-    req = requests.delete(f'http://127.0.0.1:5000/api/records/delete/{barcode}')
+    requests.delete(f'http://127.0.0.1:5000/api/records/delete/{barcode}')
     return redirect('/battery-manager')
+
+
+@bp.route('/battery-manager/<barcode>')
+def get_record_page(barcode):
+    record = requests.get(f'http://127.0.0.1:5000/api/records/{barcode}')
+    return render_template('battery-manager/battery-page.html',
+                           battery=record.json())
