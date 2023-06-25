@@ -6,6 +6,9 @@ import requests
 from app.models.form_data import Form
 
 TOKEN = 'test_token'
+@bp.route('/battery-manager/dashboard')
+def dashboard():
+    return render_template('battery-manager/dashboard-page.html')
 
 
 @bp.route('/battery-manager')
