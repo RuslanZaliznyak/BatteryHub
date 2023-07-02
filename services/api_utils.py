@@ -54,3 +54,19 @@ class APIClient:
         except Exception as e:
             return {'message error': str(e)}
 
+    @classmethod
+    def record_delete(cls, barcode: int):
+        try:
+            print(cls.API_URL)
+            response = requests.delete(f'{cls.API_URL}/{barcode}')
+
+            if response.status_code == 200:
+                print(f"Record with barcode {barcode} deleted successfully.")
+            else:
+                print(f"Failed to delete record with barcode {barcode}. Error: {response.text}")
+
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred during the request: {str(e)}")
+
+
+

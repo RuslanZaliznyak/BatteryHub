@@ -15,7 +15,6 @@ def dashboard():
 
 
 @bp.route('/battery-manager')
-# ARGS Search not works
 def battery_manager():
     all_battery_records = APIClient.get_all_records()
 
@@ -42,9 +41,7 @@ def add_battery():
 
 @bp.route('/delete/<barcode>')
 def delete(barcode):
-    requests.get(c.API_URL,
-                 headers={'Authorization': c.TOKEN})
-    requests.delete(f'{c.API_URL}/delete/{barcode}')
+    APIClient.record_delete(barcode=barcode)
     return redirect('/battery-manager')
 
 
