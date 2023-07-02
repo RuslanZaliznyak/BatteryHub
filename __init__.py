@@ -18,8 +18,4 @@ def create_app(config_class=Config):
     return app
 
 
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
 
-    app = create_app()
-    serve(app, host='127.0.0.1', port=5001)
