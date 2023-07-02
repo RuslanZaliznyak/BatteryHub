@@ -1,20 +1,6 @@
-import json
-
 from app.battery_manager import bp
 from flask import render_template, request, redirect
-import requests
-from app.models.form_data import Form
-from app.config import Config as c
 from app.services.api_utils import APIClient
-
-@bp.route('/battery-manager/dashboard')
-def dashboard():
-    records = APIClient.get_last_record()
-
-    return render_template(
-        'battery-manager/dashboard-page.html',
-        batteries=records
-    )
 
 
 @bp.route('/battery-manager')
@@ -33,7 +19,7 @@ def battery_manager():
         batteries=all_battery_records)
 
 
-@bp.route('/add', methods=['POST', 'GET'])
+@bp.route('/battery-manager/add', methods=['POST', 'GET'])
 def add_battery():
     if request.method == 'POST':
         response = APIClient.add_record(request)
