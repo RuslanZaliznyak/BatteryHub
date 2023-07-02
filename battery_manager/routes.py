@@ -7,11 +7,14 @@ from app.models.form_data import Form
 from app.config import Config as c
 from app.services.api_utils import APIClient
 
-
 @bp.route('/battery-manager/dashboard')
 def dashboard():
-    # NOTE: This function is still under development
-    return render_template('battery-manager/dashboard-page.html')
+    records = APIClient.get_last_record()
+
+    return render_template(
+        'battery-manager/dashboard-page.html',
+        batteries=records
+    )
 
 
 @bp.route('/battery-manager')
@@ -47,6 +50,6 @@ def delete(barcode):
 
 @bp.route('/battery-manager/<barcode>')
 def get_record_page(barcode):
-    record = requests.get(f'{c.API_URL}/{barcode}')
+    record = APIClient.get_record_by_barcode(barcode)
     return render_template('battery-manager/battery-page.html',
-                           battery=record.json())
+                           battery=record)

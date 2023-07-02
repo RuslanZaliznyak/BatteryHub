@@ -1,3 +1,5 @@
+import json
+
 import requests
 from app.config import APIConfig
 from flask import request
@@ -62,11 +64,29 @@ class APIClient:
 
             if response.status_code == 200:
                 print(f"Record with barcode {barcode} deleted successfully.")
+                return {'message': f'Record with barcode {barcode} deleted successfully.'}
             else:
                 print(f"Failed to delete record with barcode {barcode}. Error: {response.text}")
+                return {'message': f'Failed to delete record with barcode {barcode}. Error: {response.text}'}
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred during the request: {str(e)}")
+
+    @classmethod
+    def get_record_by_barcode(cls, barcode):
+        try:
+            response = requests.get(f'{cls.API_URL}/{barcode}')
+
+            if response.status_code == 200:
+                record = response.json()
+                print(f"Record with barcode {barcode}: {record}")
+                return record
+            else:
+                print(f"Failed to retrieve record with barcode {barcode}. Error: {response.text}")
 
         except requests.exceptions.RequestException as e:
             print(f"An error occurred during the request: {str(e)}")
 
-
-
+    @classmethod
+    def get_last_record(cls):
+        response = requests.get(f'{cls.API_URL}/last')
+        return response.json()
