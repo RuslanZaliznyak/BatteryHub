@@ -86,7 +86,8 @@
             <td>{{ battery.source }}</td>
             <td>{{ battery.weight }}</td>
             <td>{{ battery.datetime }}</td>
-            <td><a href="/delete/{{ battery.barcode }}">delete</a></td>
+            <td><a href="/battery-manager/delete/{{ battery.barcode }}">delete</a></td>
+            <td><a href="/battery-manager/update/{{ battery.barcode }}">update</a></td>
         </tr>
         {% endfor %}
     </tbody>

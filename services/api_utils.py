@@ -31,6 +31,15 @@ class APIClient:
             return None
 
     @classmethod
+    def update_record(cls, barcode: int, update_data):
+        response = requests.put(
+            url=f'{cls.API_URL}/{barcode}',
+            json=update_data)
+
+        print(f'update response: {response.status_code}')
+
+
+    @classmethod
     def get_all_records(cls):
         response_data = requests.get(
             url=cls.API_URL,
@@ -76,7 +85,7 @@ class APIClient:
 
             if response.status_code == 200:
                 record = response.json()
-                print(f"Record with barcode {barcode}: {record}")
+                print(f"(get_record_by_barcode func.)Record with barcode {barcode}: {record}")
                 return record
             else:
                 print(f"Failed to retrieve record with barcode {barcode}. Error: {response.text}")

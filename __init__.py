@@ -10,7 +10,7 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    app.register_blueprint(battery_manager_bp)
+    app.register_blueprint(battery_manager_bp, url_prefix='/battery-manager/')
 
     # Logs Initialization
     app.logger.setLevel(logging.DEBUG)
