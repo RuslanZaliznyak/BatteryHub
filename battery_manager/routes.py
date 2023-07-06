@@ -1,4 +1,4 @@
-import json
+from flask_login import login_required
 
 from app.battery_manager import bp
 from flask import render_template, request, redirect
@@ -6,6 +6,7 @@ from app.services.api_utils import APIClient
 
 
 @bp.route('/')
+@login_required
 def battery_manager():
     all_battery_records = APIClient.get_all_records()
 
@@ -22,6 +23,7 @@ def battery_manager():
 
 
 @bp.route('/add', methods=['POST', 'GET'])
+@login_required
 def add_battery():
     response = APIClient.get_last_record()
     if request.method == 'POST':
@@ -33,6 +35,7 @@ def add_battery():
 
 
 @bp.route('/update/<barcode>', methods=['GET', 'POST'])
+@login_required
 def update(barcode):
     response = APIClient.get_record_by_barcode(barcode)
 
@@ -57,12 +60,14 @@ def update(barcode):
 
 
 @bp.route('/delete/<barcode>')
+@login_required
 def delete(barcode):
     APIClient.record_delete(barcode=barcode)
     return redirect('/battery-manager')
 
 
 @bp.route('/<barcode>')
+@login_required
 def get_record_page(barcode):
     record = APIClient.get_record_by_barcode(barcode)
     return render_template('battery-manager/battery-page.html',

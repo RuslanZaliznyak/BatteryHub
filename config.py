@@ -8,6 +8,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     HOST = os.environ.get('HOST')
     PORT = os.environ.get('PORT')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///db.db'
 
 
 class APIConfig:
