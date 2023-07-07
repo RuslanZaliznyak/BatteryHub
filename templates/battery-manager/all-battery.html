@@ -1,96 +1,11 @@
-{% extends 'battery-manager/base.html' %}
+{% extends "_base.html" %}
 
-{% block manager %}
-<nav>
-    <div class="container">
-        <br>
-        <form method="GET" enctype="multipart/form-data">
-            <div class="form-row justify-content-center">
-                <div class="form-group col-md-2">
-                    <select class="form-control" id="order_by" name="order_by">
-                        <option value="desc">Sort Descending</option>
-                        <option value="asc">Sort Ascending</option>
-                    </select>
-                </div>
+{% block content %}
 
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="sort_by" name="sort_by" placeholder="Sort By">
-                </div>
 
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="min_voltage" name="min_voltage" placeholder="Min Voltage">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="max_voltage" name="max_voltage" placeholder="Max Voltage">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="min_capacity" name="min_capacity" placeholder="Min Capacity">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="max_capacity" name="max_capacity" placeholder="Max Capacity">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="min_resistance" name="min_resistance" placeholder="Min Resistance">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="max_resistance" name="max_resistance" placeholder="Max Resistance">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Name">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="color" name="color" placeholder="Color">
-                </div>
-
-                <div class="form-group col-md-2">
-                    <input type="text" class="form-control" id="source" name="source" placeholder="Source">
-                </div>
-            </div>
-            <div class="col-md-12 text-center mt-3">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </form>
-    </div>
-</nav>
+{% include "battery-manager/form.html" %}
 <br>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th scope="col">Barcode</th>
-            <th scope="col">Name</th>
-            <th scope="col">Color</th>
-            <th scope="col">Voltage</th>
-            <th scope="col">Resistance</th>
-            <th scope="col">Capacity</th>
-            <th scope="col">Battery Source</th>
-            <th scope="col">Weight</th>
-            <th scope="col">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for battery in batteries %}
-        <tr>
-            <td><a href="/battery-manager/{{ battery.barcode }}">{{ battery.barcode }}</a></td>
-            <td>{{ battery.name }}</td>
-            <td>{{ battery.color }}</td>
-            <td>{{ battery.voltage }}</td>
-            <td>{{ battery.resistance }}</td>
-            <td>{{ battery.capacity }}</td>
-            <td>{{ battery.source }}</td>
-            <td>{{ battery.weight }}</td>
-            <td>{{ battery.datetime }}</td>
-            <td><a href="/battery-manager/delete/{{ battery.barcode }}">delete</a></td>
-            <td><a href="/battery-manager/update/{{ battery.barcode }}">update</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
+{% include "battery-manager/table.html" %}
+
+
 {% endblock %}

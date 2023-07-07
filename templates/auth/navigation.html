@@ -3,7 +3,8 @@
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="{{ url_for('core.home') }}" class="nav-link px-2 text-secondary">Home</a></li>
+        <li><a href="{{ url_for('battery_manager.battery_manager') }}" class="nav-link px-2 text-secondary">Inventory</a></li>
+        <li><a href="{{ url_for('battery_manager.add_battery') }}" class="nav-link px-2 text-secondary">Add</a></li>
       </ul>
 
       <div class="text-end">
@@ -13,7 +14,6 @@
           <a href="{{ url_for('auth.login') }}"><button type="button" class="btn btn-outline-light me-2">Login</button></a>
           <a href="{{ url_for('auth.register') }}"><button type="button" class="btn btn-success">Sign up</button></a>
         {% endif %}
-
       </div>
     </div>
   </div>

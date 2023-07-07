@@ -1,54 +1,53 @@
-{% extends 'battery-manager/base.html' %}
+{% extends '_base.html' %}
 
-{% block manager %}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h3>Add Battery Form</h3>
-            <p>This is a data input form. Please fill in all the required fields and click the "Send" button.</p>
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <h3>Add Battery Form</h3>
+        <p>This is a data input form. Please fill in all the required fields and click the "Send" button.</p>
 
-            <form method="POST" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group mb-2">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="color">Color</label>
-                            <input type="text" class="form-control" name="color" id="color" placeholder="Color" required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="voltage">Voltage</label>
-                            <input type="number" class="form-control" name="voltage" id="voltage" min="0" max="4.5" step="0.01" placeholder="Voltage" required>
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="resistance">Resistance</label>
-                            <input type="number" class="form-control" name="resistance" id="resistance" min="0" max="999.99" step="0.01" placeholder="Resistance" required>
-                        </div>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group mb-2">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Name">
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group mb-2">
-                            <label for="source">Source</label>
-                            <input type="text" class="form-control" name="source" id="source" placeholder="Source">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="weight">Weight</label>
-                            <input type="number" class="form-control" name="weight" id="weight" min="0.001" max="9.999" step="0.001" inputmode="decimal" placeholder="Weight">
-                        </div>
-                        <div class="form-group mb-2">
-                            <label for="capacity">Capacity</label>
-                            <input type="number" class="form-control" name="capacity" id="capacity" min="1" max="9999" step="1" placeholder="Capacity">
-                        </div>
+                    <div class="form-group mb-2">
+                        <label for="color">Color</label>
+                        <input type="text" class="form-control" name="color" id="color" placeholder="Color" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="voltage">Voltage</label>
+                        <input type="number" class="form-control" name="voltage" id="voltage" min="0" max="4.5" step="0.01" placeholder="Voltage" required>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="resistance">Resistance</label>
+                        <input type="number" class="form-control" name="resistance" id="resistance" min="0" max="999.99" step="0.01" placeholder="Resistance" required>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Send</button>
+                <div class="col-lg-6">
+                    <div class="form-group mb-2">
+                        <label for="source">Source</label>
+                        <input type="text" class="form-control" name="source" id="source" placeholder="Source">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="weight">Weight</label>
+                        <input type="number" class="form-control" name="weight" id="weight" min="0.001" max="9.999" step="0.001" inputmode="decimal" placeholder="Weight">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="capacity">Capacity</label>
+                        <input type="number" class="form-control" name="capacity" id="capacity" min="1" max="9999" step="1" placeholder="Capacity">
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
     </div>
 </div>
+
 
 <h4>Last record</h4>
 

@@ -7,8 +7,6 @@ from app.models.forms import RegisterForm, LoginForm
 from app.models.auth import User
 
 
-
-
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
@@ -23,7 +21,7 @@ def register():
         login_user(user)
         flash("You registered and are now logged in. Welcome!", "success")
 
-        return redirect('url main page')
+        return redirect('/')
 
     return render_template("auth/register.html", form=form)
 

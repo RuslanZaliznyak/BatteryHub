@@ -1,47 +1,7 @@
-{% extends '/battery-manager/base.html' %}
+{% extends '_base.html' %}
 
-{% block manager %}
+{% block content %}
 
-<table class="table table-hover">
-    <tbody>
-    <tr>
-        <th scope="col">Barcode</th>
-        <td>{{ battery.barcode }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Name</th>
-        <td>{{ battery.name }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Color</th>
-        <td>{{ battery.color }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Voltage</th>
-        <td>{{ battery.voltage }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Resistance</th>
-        <td>{{ battery.resistance }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Source</th>
-        <td>{{ battery.source }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Weight</th>
-        <td>{{ battery.capacity }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Capacity</th>
-        <td>{{ battery.capacity }}</td>
-    </tr>
-    <tr>
-        <th scope="col">Date and time added</th>
-        <td>{{ battery.datetime }}</td>
-
-    </tbody>
-
-</table>
+{% include "battery-manager/details-table.html" %}
 
 {% endblock %}

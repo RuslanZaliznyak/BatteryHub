@@ -1,0 +1,32 @@
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Barcode</th>
+            <th scope="col">Name</th>
+            <th scope="col">Color</th>
+            <th scope="col">Voltage</th>
+            <th scope="col">Resistance</th>
+            <th scope="col">Capacity</th>
+            <th scope="col">Battery Source</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for battery in batteries %}
+        <tr>
+            <td><a href="/battery-manager/{{ battery.barcode }}">{{ battery.barcode }}</a></td>
+            <td>{{ battery.name }}</td>
+            <td>{{ battery.color }}</td>
+            <td>{{ battery.voltage }}</td>
+            <td>{{ battery.resistance }}</td>
+            <td>{{ battery.capacity }}</td>
+            <td>{{ battery.source }}</td>
+            <td>{{ battery.weight }}</td>
+            <td>{{ battery.datetime }}</td>
+            <td><a href="/battery-manager/delete/{{ battery.barcode }}">delete</a></td>
+            <td><a href="/battery-manager/update/{{ battery.barcode }}">update</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
