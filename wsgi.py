@@ -11,6 +11,5 @@ app = create_app()
 def load_user(user_id):
     return User.query.filter(User.id == int(user_id)).first()
 
-
 #serve(app, host=c.HOST, port=c.PORT)
 app.run(port=5022)

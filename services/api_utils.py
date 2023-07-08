@@ -9,6 +9,7 @@ class APIClient:
     TOKEN = APIConfig.TOKEN
     API_URL = f'{APIConfig.MAIN_API}{APIConfig.API_MAIN_ENDPOINT}'
 
+
     @classmethod
     def get_args(cls, flask_req: request):
         return flask_req.args.to_dict()

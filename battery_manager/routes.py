@@ -11,7 +11,6 @@ def battery_manager():
     all_battery_records = APIClient.get_all_records()
 
     filtered_battery_records = APIClient.get_records_with_args(request)
-
     if filtered_battery_records:
         return render_template(
             'battery-manager/all-battery.html',
@@ -30,8 +29,9 @@ def add_battery():
         response = APIClient.add_record(request)
         if 'error' not in response:
             return redirect('/battery-manager/add')
+    print(response)
     return render_template('battery-manager/add-battery.html',
-                           battery=response[0])
+                           batteries=response)
 
 
 @bp.route('/update/<barcode>', methods=['GET', 'POST'])
@@ -40,18 +40,9 @@ def update(barcode):
     response = APIClient.get_record_by_barcode(barcode)
 
     if request.method == 'POST':
-
-        new_params = request.form.to_dict()
-
-        #TEST FUNCTION!
-
-        result = {}
-        for key in response:
-            if key == 'barcode' or key == 'datetime' or key == 'id':
-                continue
-            result[key] = new_params[key]
-
-        response_ = APIClient.update_record(barcode, result)
+        result = {key: request.form.to_dict()[key]
+                  for key in response if key not in ['barcode', 'datetime', 'id']}
+        APIClient.update_record(barcode, result)
 
         return redirect('/battery-manager/update/<barcode>')
 

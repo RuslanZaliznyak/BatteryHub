@@ -6,79 +6,14 @@
         <h3>Add Battery Form</h3>
         <p>This is a data input form. Please fill in all the required fields and click the "Send" button.</p>
 
-        <form method="POST" enctype="multipart/form-data">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group mb-2">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Name">
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="color">Color</label>
-                        <input type="text" class="form-control" name="color" id="color" placeholder="Color" required>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="voltage">Voltage</label>
-                        <input type="number" class="form-control" name="voltage" id="voltage" min="0" max="4.5" step="0.01" placeholder="Voltage" required>
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="resistance">Resistance</label>
-                        <input type="number" class="form-control" name="resistance" id="resistance" min="0" max="999.99" step="0.01" placeholder="Resistance" required>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group mb-2">
-                        <label for="source">Source</label>
-                        <input type="text" class="form-control" name="source" id="source" placeholder="Source">
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="weight">Weight</label>
-                        <input type="number" class="form-control" name="weight" id="weight" min="0.001" max="9.999" step="0.001" inputmode="decimal" placeholder="Weight">
-                    </div>
-                    <div class="form-group mb-2">
-                        <label for="capacity">Capacity</label>
-                        <input type="number" class="form-control" name="capacity" id="capacity" min="1" max="9999" step="1" placeholder="Capacity">
-                    </div>
-                </div>
-            </div>
-            <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary">Send</button>
-            </div>
-        </form>
+        {% include "battery-manager/add-form.html" %}
+
     </div>
 </div>
 
 
 <h4>Last record</h4>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th scope="col">Barcode</th>
-            <th scope="col">Name</th>
-            <th scope="col">Color</th>
-            <th scope="col">Voltage</th>
-            <th scope="col">Resistance</th>
-            <th scope="col">Capacity</th>
-            <th scope="col">Battery Source</th>
-            <th scope="col">Weight</th>
-            <th scope="col">Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><a href="/battery-manager/{{ battery.barcode }}">{{ battery.barcode }}</a></td>
-            <td>{{ battery.name }}</td>
-            <td>{{ battery.color }}</td>
-            <td>{{ battery.voltage }}</td>
-            <td>{{ battery.resistance }}</td>
-            <td>{{ battery.capacity }}</td>
-            <td>{{ battery.source }}</td>
-            <td>{{ battery.weight }}</td>
-            <td>{{ battery.datetime }}</td>
-            <td><a href="/battery-manager/delete/{{ battery.barcode }}">delete</a></td>
-        </tr>
-    </tbody>
-</table>
+{% include "battery-manager/table.html" %}
 
 {% endblock %}
