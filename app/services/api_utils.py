@@ -1,5 +1,5 @@
 import requests
-from app.config import APIConfig
+from config import APIConfig
 from flask import request
 
 from app.models.form_data import Form

@@ -1,6 +1,6 @@
 import logging
 from flask import Flask
-from app.config import Config
+from config import Config
 from app.battery_manager import bp as battery_manager_bp
 from app.extensions import db, login_manager, bcrypt
 from app.models.auth import User
