@@ -28,4 +28,6 @@ def create_app(config_class=Config):
     return app
 
 
-
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.id == int(user_id)).first()
